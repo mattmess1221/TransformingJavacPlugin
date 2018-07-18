@@ -24,7 +24,7 @@ jar {
 }
 
 compileTestJava {
-    options.compilerArgs += '-Xplugin:FooTransformer'
+    options.compilerArgs += '-Xplugin:FooJavacTransformer'
 }
 
 tasks.withType(JavaCompile) {
