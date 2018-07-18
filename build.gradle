@@ -1,0 +1,33 @@
+import org.gradle.internal.jvm.Jvm
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // add tools.jar to compile classpath
+    compile files(Jvm.current().toolsJar)
+    runtime 'org.ow2.asm:asm-all:5.2'
+    compileOnly 'org.ow2.asm:asm-debug-all:5.2'
+
+    testCompile 'junit:junit:4.12'
+    testCompile files(jar.outputs)
+}
+jar {
+    configurations.runtime.collect {it.isDirectory() ? it : zipTree(it)}.each{
+        from it
+    }
+}
+
+compileTestJava {
+    options.compilerArgs += '-Xplugin:FooTransformer'
+}
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
